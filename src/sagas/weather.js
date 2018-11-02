@@ -4,7 +4,8 @@ import {
   getWeatherSuccess,
   getWeatherError,
   removeWeatherRequest,
-  removeWeatherSuccess
+  removeWeatherSuccess,
+  setWeatherActive
 } from "../ducks/weather";
 
 export function* watchFetchProducts() {
@@ -24,6 +25,7 @@ function* fetchWeather(action) {
       }&type=accurate&APPID=e539b3dcdce62f43d0c9eac4ff2b6ab4&cnt=5`
     ).then(res => res.json());
     yield put(getWeatherSuccess({ id, name, list }));
+    yield put(setWeatherActive({ id }));
   }
   if (action.type === removeWeatherRequest().type) {
     yield put(removeWeatherSuccess(action.payload));

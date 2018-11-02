@@ -1,6 +1,7 @@
 import { handleActions } from "redux-actions";
 import { combineReducers } from "redux";
 import {
+  setWeatherActive,
   getWeatherSuccess,
   getWeatherError,
   removeWeatherSuccess
@@ -8,6 +9,10 @@ import {
 
 const cities = handleActions(
   {
+    [setWeatherActive.toString()]: (state, action) => [
+      ...state,
+      { activeId: action.payload }
+    ],
     [getWeatherSuccess.toString()]: (state, action) => [
       ...state,
       action.payload

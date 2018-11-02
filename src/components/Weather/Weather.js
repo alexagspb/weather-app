@@ -4,6 +4,7 @@ import {
   removeWeatherRequest,
   getCities
 } from "../../ducks/weather";
+import { getActiveId } from "../../ducks/activate";
 import { connect } from "react-redux";
 
 class Weather extends PureComponent {
@@ -67,7 +68,7 @@ class Weather extends PureComponent {
 
   render() {
     const { city } = this.state;
-    const { cities } = this.props;
+    const { cities, activeId } = this.props;
 
     return (
       <div className="container">
@@ -82,7 +83,7 @@ class Weather extends PureComponent {
         {cities &&
           cities.map(item => (
             <div key={item.id}>
-              <h2 className={""}>
+              <h2 className={`${activeId === item.id ? "active" : ""}`}>
                 {item.name}
                 <span onClick={() => this.removeCity(item.id)}>X</span>
               </h2>
@@ -94,7 +95,8 @@ class Weather extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  cities: getCities(state)
+  cities: getCities(state),
+  activeId: getActiveId(state)
 });
 
 const mapDispatchToProps = { getWeatherRequest, removeWeatherRequest };
