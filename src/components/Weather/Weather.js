@@ -1,25 +1,30 @@
 import React, { PureComponent } from "react";
-import { getWeatherRequest } from "../../ducks/weather";
+import {
+  getWeatherRequest,
+  removeWeatherRequest,
+  getCities
+} from "../../ducks/weather";
 import { connect } from "react-redux";
 
-class Login extends PureComponent {
-  state = { token: "" };
+class Weather extends PureComponent {
+  state = { city: "" };
 
-  //   handleInputChange = event => {
-  //     this.setState({ token: event.target.value });
-  //   };
+  handleInputChange = e => {
+    this.setState({ city: e.target.value });
+  };
 
-  //   handleKeyPress = e => {
-  //     const { token } = this.state;
-  //     const { authorize } = this.props;
-  //     if (e.key === ENTER) {
-  //       authorize(token);
-  //     }
-  //   };
+  handleKeyPress = e => {
+    const { city } = this.state;
+    const { getWeatherRequest } = this.props;
+    if (e.key === "Enter") {
+      getWeatherRequest(city);
+      this.setState({ city: "" });
+    }
+  };
 
   async componentDidMount() {
     console.log("componentDidMount");
-    this.props.getWeatherRequest(55.755826, 37.6173);
+    this.props.getWeatherRequest("Belgorod");
     const { lat, lng } = await this.getcurrentLocation();
     console.log(lat, lng);
 
@@ -56,29 +61,45 @@ class Login extends PureComponent {
     // };
   }
 
-  render() {
-    // const { token } = this.state;
-    // const { isAuthorized } = this.props;
+  removeCity = id => {
+    this.props.removeWeatherRequest(id);
+  };
 
-    // if (isAuthorized) {
-    //   return <Redirect to="/" />;
-    // }
+  render() {
+    const { city } = this.state;
+    const { cities } = this.props;
 
     return (
       <div className="container">
-        <h1>Weather</h1>
+        <input
+          placeholder="Введите город"
+          value={city}
+          onChange={this.handleInputChange}
+          onKeyPress={this.handleKeyPress}
+        />
+        <p>Для продолжения нажмите Enter</p>
+
+        {cities &&
+          cities.map(item => (
+            <div key={item.id}>
+              <h2 className={""}>
+                {item.name}
+                <span onClick={() => this.removeCity(item.id)}>X</span>
+              </h2>
+            </div>
+          ))}
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  //   cities: getCities(state)
+  cities: getCities(state)
 });
 
-const mapDispatchToProps = { getWeatherRequest };
+const mapDispatchToProps = { getWeatherRequest, removeWeatherRequest };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Login);
+)(Weather);

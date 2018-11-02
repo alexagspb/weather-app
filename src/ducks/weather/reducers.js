@@ -3,7 +3,8 @@ import { combineReducers } from "redux";
 import {
   getWeatherRequest,
   getWeatherSuccess,
-  getWeatherError
+  getWeatherError,
+  removeWeatherSuccess
 } from "./actions";
 
 const cities = handleActions(
@@ -13,7 +14,9 @@ const cities = handleActions(
       ...state,
       action.payload
     ],
-    [getWeatherError.toString()]: () => false
+    [getWeatherError.toString()]: () => false,
+    [removeWeatherSuccess.toString()]: (state, action) =>
+      state.filter(item => item.id !== action.payload)
   },
   []
 );
