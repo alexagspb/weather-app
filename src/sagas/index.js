@@ -1,6 +1,8 @@
 import { fork } from "redux-saga/effects";
-import { watchFetchCities } from "./cities";
+import { watchFetchCity } from "./city";
+import { watchFetchAllCities } from "./allCities";
 
 export default function*() {
-  yield fork(watchFetchCities);
+  yield fork(watchFetchAllCities);
+  yield fork(watchFetchCity);
 }

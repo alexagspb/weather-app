@@ -1,8 +1,21 @@
 import { handleActions } from "redux-actions";
-// import { combineReducers } from "redux";
-import { getCitySuccess, getCityError, removeCitySuccess } from "./actions";
+import { combineReducers } from "redux";
+import {
+  getCitySuccess,
+  getCityError,
+  removeCitySuccess,
+  setCityActive
+} from "./actions";
 
-const cities = handleActions(
+const activeCity = handleActions(
+  {
+    [setCityActive.toString()]: (_state, action) => action.payload,
+    [removeCitySuccess.toString()]: state => state
+  },
+  {}
+);
+
+const citiesList = handleActions(
   {
     [getCitySuccess.toString()]: (state, action) => [...state, action.payload],
     [getCityError.toString()]: () => false,
@@ -12,5 +25,4 @@ const cities = handleActions(
   []
 );
 
-export default cities;
-// export default combineReducers({ cities });
+export default combineReducers({ citiesList, activeCity });

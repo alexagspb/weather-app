@@ -2,13 +2,18 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import Spinner from "react-svg-spinner";
 
+import City from "./City";
+import Day from "./Day";
+
 import {
   getCityRequest,
   removeCityRequest,
-  getCities
+  updateCityRequest,
+  selectCityRequest,
+  getCitiesList,
+  getActiveCity
 } from "../../ducks/cities";
 import { getLoading } from "../../ducks/loading";
-import { getActiveId } from "../../ducks/active";
 
 class Weather extends PureComponent {
   state = { city: "" };
@@ -69,9 +74,17 @@ class Weather extends PureComponent {
     this.props.removeCityRequest(id);
   };
 
+  updateCity = id => {
+    this.props.updateCityRequest(id);
+  };
+
+  selectCity = name => {
+    this.props.selectCityRequest(name);
+  };
+
   render() {
     const { city } = this.state;
-    const { loading, cities, activeId } = this.props;
+    const { loading, citiesList, activeCity } = this.props;
 
     return (
       <div className="Cities">
@@ -88,15 +101,22 @@ class Weather extends PureComponent {
             <Spinner size="64px" color="blue" gap={5} />
           </div>
         ) : (
-          cities &&
-          cities.map(item => (
-            <div key={item.id}>
-              <h2 className={`${activeId === item.id ? "active" : ""}`}>
-                {item.name}
-                <span onClick={() => this.removeCity(item.id)}>X</span>
-              </h2>
-            </div>
-          ))
+          <div>
+            {citiesList &&
+              citiesList.map(item => (
+                <City
+                  key={item.id}
+                  isActive={activeCity.id === item.id}
+                  item={item}
+                  selectCity={this.selectCity}
+                  updateCity={this.updateCity}
+                  removeCity={this.removeCity}
+                />
+              ))}
+
+            {activeCity.list &&
+              activeCity.list.map(item => <Day key={item.dt} item={item} />)}
+          </div>
         )}
       </div>
     );
@@ -105,11 +125,16 @@ class Weather extends PureComponent {
 
 const mapStateToProps = state => ({
   loading: getLoading(state),
-  cities: getCities(state),
-  activeId: getActiveId(state)
+  citiesList: getCitiesList(state),
+  activeCity: getActiveCity(state)
 });
 
-const mapDispatchToProps = { getCityRequest, removeCityRequest };
+const mapDispatchToProps = {
+  getCityRequest,
+  removeCityRequest,
+  updateCityRequest,
+  selectCityRequest
+};
 
 export default connect(
   mapStateToProps,
