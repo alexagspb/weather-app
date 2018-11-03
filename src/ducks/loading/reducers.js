@@ -1,27 +1,15 @@
 import { handleActions } from "redux-actions";
-import { combineReducers } from "redux";
-import {
-  setWeatherActive,
-  getWeatherSuccess,
-  getWeatherError,
-  removeWeatherSuccess
-} from "./actions";
+// import { combineReducers } from "redux";
+import { getCityRequest, getCitySuccess, getCityError } from "./actions";
 
-const cities = handleActions(
+const loading = handleActions(
   {
-    [setWeatherActive.toString()]: (state, action) => [
-      ...state,
-      { activeId: action.payload }
-    ],
-    [getWeatherSuccess.toString()]: (state, action) => [
-      ...state,
-      action.payload
-    ],
-    [getWeatherError.toString()]: () => false,
-    [removeWeatherSuccess.toString()]: (state, action) =>
-      state.filter(item => item.id !== action.payload)
+    [getCityRequest.toString()]: () => true,
+    [getCitySuccess.toString()]: () => false,
+    [getCityError.toString()]: () => false
   },
-  []
+  false
 );
 
-export default combineReducers({ cities });
+export default loading;
+// export default combineReducers({ loading });

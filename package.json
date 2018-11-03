@@ -7,6 +7,7 @@
     "react-dom": "^16.6.0",
     "react-redux": "^5.1.0",
     "react-scripts": "2.1.1",
+    "react-svg-spinner": "^1.0.2",
     "redux": "^4.0.1",
     "redux-actions": "^2.6.4",
     "redux-saga": "^0.16.2"

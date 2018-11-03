@@ -1,11 +1,14 @@
 import React, { PureComponent } from "react";
-import {
-  getWeatherRequest,
-  removeWeatherRequest,
-  getCities
-} from "../../ducks/weather";
-import { getActiveId } from "../../ducks/activate";
 import { connect } from "react-redux";
+import Spinner from "react-svg-spinner";
+
+import {
+  getCityRequest,
+  removeCityRequest,
+  getCities
+} from "../../ducks/cities";
+import { getLoading } from "../../ducks/loading";
+import { getActiveId } from "../../ducks/active";
 
 class Weather extends PureComponent {
   state = { city: "" };
@@ -16,16 +19,16 @@ class Weather extends PureComponent {
 
   handleKeyPress = e => {
     const { city } = this.state;
-    const { getWeatherRequest } = this.props;
+    const { getCityRequest } = this.props;
     if (e.key === "Enter") {
-      getWeatherRequest(city);
+      getCityRequest(city);
       this.setState({ city: "" });
     }
   };
 
   async componentDidMount() {
     console.log("componentDidMount");
-    this.props.getWeatherRequest("Belgorod");
+    this.props.getCityRequest("Belgorod");
     const { lat, lng } = await this.getcurrentLocation();
     console.log(lat, lng);
 
@@ -63,15 +66,15 @@ class Weather extends PureComponent {
   }
 
   removeCity = id => {
-    this.props.removeWeatherRequest(id);
+    this.props.removeCityRequest(id);
   };
 
   render() {
     const { city } = this.state;
-    const { cities, activeId } = this.props;
+    const { loading, cities, activeId } = this.props;
 
     return (
-      <div className="container">
+      <div className="Cities">
         <input
           placeholder="Введите город"
           value={city}
@@ -80,7 +83,12 @@ class Weather extends PureComponent {
         />
         <p>Для продолжения нажмите Enter</p>
 
-        {cities &&
+        {loading ? (
+          <div className="spinner row justify-content-md-center">
+            <Spinner size="64px" color="blue" gap={5} />
+          </div>
+        ) : (
+          cities &&
           cities.map(item => (
             <div key={item.id}>
               <h2 className={`${activeId === item.id ? "active" : ""}`}>
@@ -88,18 +96,20 @@ class Weather extends PureComponent {
                 <span onClick={() => this.removeCity(item.id)}>X</span>
               </h2>
             </div>
-          ))}
+          ))
+        )}
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
+  loading: getLoading(state),
   cities: getCities(state),
   activeId: getActiveId(state)
 });
 
-const mapDispatchToProps = { getWeatherRequest, removeWeatherRequest };
+const mapDispatchToProps = { getCityRequest, removeCityRequest };
 
 export default connect(
   mapStateToProps,

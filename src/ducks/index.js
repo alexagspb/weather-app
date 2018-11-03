@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import weather from "./weather";
-import activate from "./activate";
-// import weather from "./weather";
+import loading from "./loading";
+import active from "./active";
+import cities from "./cities";
 
-export default combineReducers({ weather, activate });
+export default combineReducers({ loading, active, cities });

@@ -1,1 +1,1 @@
-export const getCities = state => state.weather.cities;
+export const getLoading = state => state.loading;

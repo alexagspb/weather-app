@@ -1,6 +1,6 @@
 import { fork } from "redux-saga/effects";
-import { watchFetchProducts } from "./weather";
+import { watchFetchCities } from "./cities";
 
 export default function*() {
-  yield fork(watchFetchProducts);
+  yield fork(watchFetchCities);
 }
