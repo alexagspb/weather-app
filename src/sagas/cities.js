@@ -1,4 +1,4 @@
-import { takeEvery, put, call } from "redux-saga/effects";
+import { takeEvery, put } from "redux-saga/effects";
 import { getCitiesRequest, getCitiesSuccess } from "../ducks/cities";
 
 import { getCitiesFromLocalStorage } from "../localstorage";

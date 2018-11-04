@@ -2,6 +2,7 @@ import { takeEvery, put, call } from "redux-saga/effects";
 import {
   getCityRequest,
   getCitySuccess,
+  updateCityRequest,
   getCityError,
   removeCityRequest,
   removeCitySuccess,
@@ -17,7 +18,7 @@ import {
 
 export function* watchFetchCity() {
   yield takeEvery(
-    [getCityRequest, removeCityRequest, selectCityRequest],
+    [getCityRequest, removeCityRequest, selectCityRequest, updateCityRequest],
     fetchCity
   );
 }
@@ -28,11 +29,14 @@ function* fetchCity(action) {
     yield put(setCityActive({ id, name, list }));
   }
 
-  if (action.type === getCityRequest().type) {
+  if (
+    action.type === getCityRequest().type ||
+    action.type === updateCityRequest().type
+  ) {
     let existCity = getCityFromLocalStorage(action.payload);
     let id, name, list;
 
-    if (existCity) {
+    if (existCity && action.type !== updateCityRequest().type) {
       ({ id, name, list } = existCity);
     } else {
       ({
@@ -44,12 +48,18 @@ function* fetchCity(action) {
         }&type=accurate&APPID=e539b3dcdce62f43d0c9eac4ff2b6ab4&cnt=5`
       ).then(res => res.json()));
 
+      if (action.type === updateCityRequest().type) {
+        yield put(removeCitySuccess(action.payload));
+        yield call(removeCityFromLocalStorage, action.payload);
+      }
+
       yield put(getCitySuccess({ id, name, list }));
       yield call(setCityToLocalStorage, { id, name, list });
     }
 
     yield put(setCityActive({ id, name, list }));
   }
+
   if (action.type === removeCityRequest().type) {
     yield put(removeCitySuccess(action.payload));
     yield call(removeCityFromLocalStorage, action.payload);

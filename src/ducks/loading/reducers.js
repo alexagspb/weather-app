@@ -1,7 +1,7 @@
 import { handleActions } from "redux-actions";
-// import { combineReducers } from "redux";
 import {
   getCityRequest,
+  updateCityRequest,
   getCitySuccess,
   getCityError,
   setCityActive
@@ -10,6 +10,7 @@ import {
 const loading = handleActions(
   {
     [getCityRequest.toString()]: () => true,
+    [updateCityRequest.toString()]: () => true,
     [getCitySuccess.toString()]: () => false,
     [getCityError.toString()]: () => false,
     [setCityActive.toString()]: () => false
@@ -18,4 +19,3 @@ const loading = handleActions(
 );
 
 export default loading;
-// export default combineReducers({ loading });
