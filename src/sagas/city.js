@@ -24,7 +24,6 @@ export function* watchFetchCity() {
 
 function* fetchCity(action) {
   if (action.type === selectCityRequest().type) {
-    console.log(action.payload);
     const { id, name, list } = getCityFromLocalStorage(action.payload);
     yield put(setCityActive({ id, name, list }));
   }
@@ -34,8 +33,7 @@ function* fetchCity(action) {
     let id, name, list;
 
     if (existCity) {
-      const { id, name, list } = existCity;
-      yield put(setCityActive({ id, name, list }));
+      ({ id, name, list } = existCity);
     } else {
       ({
         city: { id, name },
@@ -46,9 +44,10 @@ function* fetchCity(action) {
         }&type=accurate&APPID=e539b3dcdce62f43d0c9eac4ff2b6ab4&cnt=5`
       ).then(res => res.json()));
 
+      yield put(getCitySuccess({ id, name, list }));
       yield call(setCityToLocalStorage, { id, name, list });
     }
-    yield put(getCitySuccess({ id, name, list }));
+
     yield put(setCityActive({ id, name, list }));
   }
   if (action.type === removeCityRequest().type) {

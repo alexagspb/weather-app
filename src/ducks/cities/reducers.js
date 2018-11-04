@@ -2,6 +2,7 @@ import { handleActions } from "redux-actions";
 import { combineReducers } from "redux";
 import {
   getCitySuccess,
+  getCitiesSuccess,
   getCityError,
   removeCitySuccess,
   setCityActive
@@ -18,9 +19,10 @@ const activeCity = handleActions(
 const citiesList = handleActions(
   {
     [getCitySuccess.toString()]: (state, action) => [...state, action.payload],
+    [getCitiesSuccess.toString()]: (state, action) => action.payload,
     [getCityError.toString()]: () => false,
     [removeCitySuccess.toString()]: (state, action) =>
-      state.filter(item => item.id !== action.payload)
+      state.filter(item => item.name !== action.payload)
   },
   []
 );

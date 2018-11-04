@@ -7,12 +7,14 @@ import Day from "./Day";
 
 import {
   getCityRequest,
+  getCitiesRequest,
   removeCityRequest,
   updateCityRequest,
   selectCityRequest,
   getCitiesList,
   getActiveCity
 } from "../../ducks/cities";
+
 import { getLoading } from "../../ducks/loading";
 
 class Weather extends PureComponent {
@@ -32,7 +34,7 @@ class Weather extends PureComponent {
   };
 
   async componentDidMount() {
-    console.log("componentDidMount");
+    this.props.getCitiesRequest();
     this.props.getCityRequest("Belgorod");
     const { lat, lng } = await this.getcurrentLocation();
     console.log(lat, lng);
@@ -70,12 +72,12 @@ class Weather extends PureComponent {
     // };
   }
 
-  removeCity = id => {
-    this.props.removeCityRequest(id);
+  removeCity = name => {
+    this.props.removeCityRequest(name);
   };
 
-  updateCity = id => {
-    this.props.updateCityRequest(id);
+  updateCity = name => {
+    this.props.updateCityRequest(name);
   };
 
   selectCity = name => {
@@ -131,6 +133,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   getCityRequest,
+  getCitiesRequest,
   removeCityRequest,
   updateCityRequest,
   selectCityRequest
