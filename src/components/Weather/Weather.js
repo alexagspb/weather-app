@@ -2,8 +2,10 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import Spinner from "react-svg-spinner";
 
-import City from "./City";
-import Day from "./Day";
+import "./Weather.css";
+
+import City from "../City";
+import Day from "../Day";
 
 import {
   getCityRequest,
@@ -31,6 +33,13 @@ class Weather extends PureComponent {
       getCityRequest(city);
       this.setState({ city: "" });
     }
+  };
+
+  handleClick = e => {
+    const { city } = this.state;
+    const { getCityRequest } = this.props;
+    getCityRequest(city);
+    this.setState({ city: "" });
   };
 
   async componentDidMount() {
@@ -89,14 +98,17 @@ class Weather extends PureComponent {
     const { loading, citiesList, activeCity } = this.props;
 
     return (
-      <div className="Cities">
+      <div className="Weather">
         <input
+          className="Weather__input"
           placeholder="Введите город"
           value={city}
           onChange={this.handleInputChange}
           onKeyPress={this.handleKeyPress}
         />
-        <p>Для продолжения нажмите Enter</p>
+        <button onClick={this.handleClick} className="Weather__button">
+          Добавить город
+        </button>
 
         {loading ? (
           <div className="spinner row justify-content-md-center">
@@ -104,20 +116,23 @@ class Weather extends PureComponent {
           </div>
         ) : (
           <div>
-            {citiesList &&
-              citiesList.map(item => (
-                <City
-                  key={item.id}
-                  isActive={activeCity.id === item.id}
-                  item={item}
-                  selectCity={this.selectCity}
-                  updateCity={this.updateCity}
-                  removeCity={this.removeCity}
-                />
-              ))}
-
-            {activeCity.list &&
-              activeCity.list.map(item => <Day key={item.dt} item={item} />)}
+            <div className="Weather__cities">
+              {citiesList &&
+                citiesList.map(item => (
+                  <City
+                    key={item.id}
+                    isActive={activeCity.id === item.id}
+                    item={item}
+                    selectCity={this.selectCity}
+                    updateCity={this.updateCity}
+                    removeCity={this.removeCity}
+                  />
+                ))}
+            </div>
+            <div className="Weather__days">
+              {activeCity.list &&
+                activeCity.list.map(item => <Day key={item.dt} item={item} />)}
+            </div>
           </div>
         )}
       </div>

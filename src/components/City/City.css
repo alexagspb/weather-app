@@ -1,0 +1,37 @@
+.City {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 8px;
+  width: 300px;
+  margin: 0 auto 5px;
+}
+.City_active {
+  background: aliceblue;
+}
+
+.City__update {
+  width: 20px;
+  background: url(./icons/update.svg) no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.City__name {
+  cursor: pointer;
+  width: 100%;
+}
+
+.City__remove {
+  width: 20px;
+  background: url(./icons/error.svg) no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.City__remove:hover {
+  background: url(./icons/error_hover.svg) no-repeat;
+  background-size: contain;
+}

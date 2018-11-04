@@ -16,6 +16,8 @@ import {
   removeCityFromLocalStorage
 } from "../localstorage";
 
+import api from "../api";
+
 export function* watchFetchCity() {
   yield takeEvery(
     [getCityRequest, removeCityRequest, selectCityRequest, updateCityRequest],
@@ -42,11 +44,7 @@ function* fetchCity(action) {
       ({
         city: { id, name },
         list
-      } = yield fetch(
-        `http://api.openweathermap.org/data/2.5/forecast/daily?q=${
-          action.payload
-        }&type=accurate&APPID=e539b3dcdce62f43d0c9eac4ff2b6ab4&cnt=5`
-      ).then(res => res.json()));
+      } = yield api.fetchForecast(action.payload));
 
       if (action.type === updateCityRequest().type) {
         yield put(removeCitySuccess(action.payload));
