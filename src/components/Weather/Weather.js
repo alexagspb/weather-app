@@ -44,7 +44,6 @@ class Weather extends PureComponent {
 
   async componentDidMount() {
     this.props.getCitiesRequest();
-    // this.props.getCityRequest({ location: "Belgorod" });
 
     const { lat, lon } = await this.getcurrentLocation();
     console.log(lat, lon);

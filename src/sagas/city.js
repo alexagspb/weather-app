@@ -54,8 +54,8 @@ function* fetchCity(action) {
       }
 
       if (action.type === updateCityRequest().type) {
-        yield put(removeCitySuccess(action.payload));
-        yield call(removeCityFromLocalStorage, action.payload);
+        yield put(removeCitySuccess(action.payload.location));
+        yield call(removeCityFromLocalStorage, action.payload.location);
       }
 
       yield put(getCitySuccess({ id, name, list }));

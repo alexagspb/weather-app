@@ -11,7 +11,7 @@ import {
 const activeCity = handleActions(
   {
     [setCityActive.toString()]: (_state, action) => action.payload,
-    [removeCitySuccess.toString()]: state => state
+    [removeCitySuccess.toString()]: state => ({})
   },
   {}
 );
