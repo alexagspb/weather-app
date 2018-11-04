@@ -31,9 +31,15 @@
   padding: 20px 0;
   border-top: 1px solid #000;
   border-bottom: 1px solid #000;
+  border-radius: 5px;
 }
 
 .Weather__days {
   display: flex;
   justify-content: center;
+}
+
+.Weather__error {
+  color: red;
+  height: 30px;
 }

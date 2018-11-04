@@ -41,25 +41,24 @@ function* fetchCity(action) {
     if (existCity && action.type !== updateCityRequest().type) {
       ({ id, name, list } = existCity);
     } else {
-      if (action.payload.location) {
+      try {
         ({
           city: { id, name },
           list
-        } = yield api.fetchForecastByLocation(action.payload));
-      } else {
-        ({
-          city: { id, name },
-          list
-        } = yield api.fetchForecastByCoords(action.payload));
-      }
+        } = action.payload.location
+          ? yield api.fetchForecastByLocation(action.payload)
+          : yield api.fetchForecastByCoords(action.payload));
 
-      if (action.type === updateCityRequest().type) {
-        yield put(removeCitySuccess(action.payload.location));
-        yield call(removeCityFromLocalStorage, action.payload.location);
-      }
+        if (action.type === updateCityRequest().type) {
+          yield put(removeCitySuccess(action.payload.location));
+          yield call(removeCityFromLocalStorage, action.payload.location);
+        }
 
-      yield put(getCitySuccess({ id, name, list }));
-      yield call(setCityToLocalStorage, { id, name, list });
+        yield put(getCitySuccess({ id, name, list }));
+        yield call(setCityToLocalStorage, { id, name, list });
+      } catch (error) {
+        yield put(getCityError({ error: "Укажите корректный город" }));
+      }
     }
 
     yield put(setCityActive({ id, name, list }));

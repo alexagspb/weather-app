@@ -14,7 +14,8 @@ import {
   updateCityRequest,
   selectCityRequest,
   getCitiesList,
-  getActiveCity
+  getActiveCity,
+  getError
 } from "../../ducks/cities";
 
 import { getLoading } from "../../ducks/loading";
@@ -29,7 +30,8 @@ class Weather extends PureComponent {
   handleKeyPress = e => {
     const { city } = this.state;
     const { getCityRequest } = this.props;
-    if (e.key === "Enter") {
+
+    if (e.key === "Enter" && city.trim().length) {
       getCityRequest({ location: city });
       this.setState({ city: "" });
     }
@@ -38,8 +40,11 @@ class Weather extends PureComponent {
   handleClick = e => {
     const { city } = this.state;
     const { getCityRequest } = this.props;
-    getCityRequest({ location: city });
-    this.setState({ city: "" });
+
+    if (city.trim().length) {
+      getCityRequest({ location: city });
+      this.setState({ city: "" });
+    }
   };
 
   async componentDidMount() {
@@ -78,7 +83,7 @@ class Weather extends PureComponent {
 
   render() {
     const { city } = this.state;
-    const { loading, citiesList, activeCity } = this.props;
+    const { loading, error, citiesList, activeCity } = this.props;
 
     return (
       <div className="Weather">
@@ -92,6 +97,8 @@ class Weather extends PureComponent {
         <button onClick={this.handleClick} className="Weather__button">
           Добавить город
         </button>
+
+        <div className="Weather__error">{error}</div>
 
         {loading ? (
           <div className="spinner row justify-content-md-center">
@@ -125,6 +132,7 @@ class Weather extends PureComponent {
 
 const mapStateToProps = state => ({
   loading: getLoading(state),
+  error: getError(state),
   citiesList: getCitiesList(state),
   activeCity: getActiveCity(state)
 });

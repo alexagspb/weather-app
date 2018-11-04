@@ -11,7 +11,7 @@ import {
 const activeCity = handleActions(
   {
     [setCityActive.toString()]: (_state, action) => action.payload,
-    [removeCitySuccess.toString()]: state => ({})
+    [removeCitySuccess.toString()]: _state => ({})
   },
   {}
 );
@@ -19,12 +19,20 @@ const activeCity = handleActions(
 const citiesList = handleActions(
   {
     [getCitySuccess.toString()]: (state, action) => [...state, action.payload],
-    [getCitiesSuccess.toString()]: (state, action) => action.payload,
-    [getCityError.toString()]: () => false,
+    [getCitiesSuccess.toString()]: (_state, action) => action.payload,
+    [getCityError.toString()]: state => state,
     [removeCitySuccess.toString()]: (state, action) =>
       state.filter(item => item.name !== action.payload)
   },
   []
 );
 
-export default combineReducers({ citiesList, activeCity });
+const error = handleActions(
+  {
+    [getCitySuccess.toString()]: _state => ({}),
+    [getCityError.toString()]: (_state, action) => action.payload
+  },
+  {}
+);
+
+export default combineReducers({ citiesList, activeCity, error });
