@@ -41,10 +41,17 @@ function* fetchCity(action) {
     if (existCity && action.type !== updateCityRequest().type) {
       ({ id, name, list } = existCity);
     } else {
-      ({
-        city: { id, name },
-        list
-      } = yield api.fetchForecast(action.payload));
+      if (action.payload.location) {
+        ({
+          city: { id, name },
+          list
+        } = yield api.fetchForecastByLocation(action.payload));
+      } else {
+        ({
+          city: { id, name },
+          list
+        } = yield api.fetchForecastByCoords(action.payload));
+      }
 
       if (action.type === updateCityRequest().type) {
         yield put(removeCitySuccess(action.payload));

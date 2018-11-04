@@ -30,7 +30,7 @@ class Weather extends PureComponent {
     const { city } = this.state;
     const { getCityRequest } = this.props;
     if (e.key === "Enter") {
-      getCityRequest(city);
+      getCityRequest({ location: city });
       this.setState({ city: "" });
     }
   };
@@ -38,29 +38,17 @@ class Weather extends PureComponent {
   handleClick = e => {
     const { city } = this.state;
     const { getCityRequest } = this.props;
-    getCityRequest(city);
+    getCityRequest({ location: city });
     this.setState({ city: "" });
   };
 
   async componentDidMount() {
     this.props.getCitiesRequest();
-    this.props.getCityRequest("Belgorod");
-    const { lat, lng } = await this.getcurrentLocation();
-    console.log(lat, lng);
+    // this.props.getCityRequest({ location: "Belgorod" });
 
-    // this.setState(prev => ({
-    //   fields: {
-    //     ...prev.fields,
-    //     location: {
-    //       lat,
-    //       lng
-    //     }
-    //   },
-    //   currentLocation: {
-    //     lat,
-    //     lng
-    //   }
-    // }));
+    const { lat, lon } = await this.getcurrentLocation();
+    console.log(lat, lon);
+    this.props.getCityRequest({ lat, lon });
   }
 
   getcurrentLocation() {
@@ -70,15 +58,11 @@ class Weather extends PureComponent {
           const coords = pos.coords;
           resolve({
             lat: coords.latitude,
-            lng: coords.longitude
+            lon: coords.longitude
           });
         });
       });
     }
-    // return {
-    //   lat: 0,
-    //   lng: 0
-    // };
   }
 
   removeCity = name => {
@@ -86,7 +70,7 @@ class Weather extends PureComponent {
   };
 
   updateCity = name => {
-    this.props.updateCityRequest(name);
+    this.props.updateCityRequest({ location: name });
   };
 
   selectCity = name => {
