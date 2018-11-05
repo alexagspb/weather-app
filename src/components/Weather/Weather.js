@@ -52,6 +52,7 @@ class Weather extends PureComponent {
 
     const { lat, lon } = await this.getcurrentLocation();
     console.log(lat, lon);
+    //Если получили координаты текущего местоположения - запрашиваем погоду по координатам
     this.props.getCityRequest({ lat, lon });
   }
 

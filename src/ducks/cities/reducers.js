@@ -29,10 +29,10 @@ const citiesList = handleActions(
 
 const error = handleActions(
   {
-    [getCitySuccess.toString()]: _state => ({}),
+    [getCitySuccess.toString()]: _state => null,
     [getCityError.toString()]: (_state, action) => action.payload
   },
-  {}
+  null
 );
 
 export default combineReducers({ citiesList, activeCity, error });

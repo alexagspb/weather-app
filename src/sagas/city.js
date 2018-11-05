@@ -26,6 +26,7 @@ export function* watchFetchCity() {
 }
 
 function* fetchCity(action) {
+  //При выборе города из списка просто достаем его из LocalStorage
   if (action.type === selectCityRequest().type) {
     const { id, name, list } = getCityFromLocalStorage(action.payload);
     yield put(setCityActive({ id, name, list }));
@@ -35,35 +36,29 @@ function* fetchCity(action) {
     action.type === getCityRequest().type ||
     action.type === updateCityRequest().type
   ) {
-    let existCity = getCityFromLocalStorage(action.payload);
     let id, name, list;
+    //При запросе нового города или запросе обновления получаем его по api по имени или координатам
+    try {
+      ({
+        city: { id, name },
+        list
+      } = action.payload.location
+        ? yield api.fetchForecastByLocation(action.payload)
+        : yield api.fetchForecastByCoords(action.payload));
 
-    if (existCity && action.type !== updateCityRequest().type) {
-      ({ id, name, list } = existCity);
-    } else {
-      try {
-        ({
-          city: { id, name },
-          list
-        } = action.payload.location
-          ? yield api.fetchForecastByLocation(action.payload)
-          : yield api.fetchForecastByCoords(action.payload));
+      yield put(removeCitySuccess(name));
+      yield call(removeCityFromLocalStorage, name);
 
-        if (action.type === updateCityRequest().type) {
-          yield put(removeCitySuccess(action.payload.location));
-          yield call(removeCityFromLocalStorage, action.payload.location);
-        }
-
-        yield put(getCitySuccess({ id, name, list }));
-        yield call(setCityToLocalStorage, { id, name, list });
-      } catch (error) {
-        yield put(getCityError({ error: "Укажите корректный город" }));
-      }
+      yield put(getCitySuccess({ id, name, list }));
+      yield call(setCityToLocalStorage, { id, name, list });
+    } catch (error) {
+      //Обработка ошибок
+      yield put(getCityError("Укажите корректный город"));
     }
-
+    //Устанавливаем активный город
     yield put(setCityActive({ id, name, list }));
   }
-
+  //Удаляем город
   if (action.type === removeCityRequest().type) {
     yield put(removeCitySuccess(action.payload));
     yield call(removeCityFromLocalStorage, action.payload);
