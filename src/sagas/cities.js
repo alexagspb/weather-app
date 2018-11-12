@@ -1,10 +1,10 @@
-import { takeEvery, put } from "redux-saga/effects";
+import { takeLatest, put } from "redux-saga/effects";
 import { getCitiesRequest, getCitiesSuccess } from "../ducks/cities";
 
 import { getCitiesFromLocalStorage } from "../localstorage";
 
 export function* watchFetchCities() {
-  yield takeEvery([getCitiesRequest, getCitiesSuccess], fetchCities);
+  yield takeLatest([getCitiesRequest, getCitiesSuccess], fetchCities);
 }
 
 function* fetchCities(action) {

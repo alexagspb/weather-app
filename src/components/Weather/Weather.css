@@ -1,45 +1,18 @@
-.Weather {
+.weather {
   font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
 }
-
-.Weather__input {
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #000;
-  width: 300px;
-  outline: none;
-  font-size: 14px;
-  margin: 10px;
-}
-
-.Weather__button {
-  border: 1px solid #000;
-  padding: 5px 10px;
-  border-radius: 5px;
-  outline: none;
-  font-size: 14px;
-  background: #eee;
-  cursor: pointer;
-}
-
-.Weather__button:hover {
-  background: #ccc;
-  box-shadow: 0 0 5px #ccc;
-}
-
-.Weather__cities {
+.weather__cities {
   padding: 20px 0;
   border-top: 1px solid #000;
   border-bottom: 1px solid #000;
   border-radius: 5px;
 }
-
-.Weather__days {
+.weather__days {
   display: flex;
   justify-content: center;
 }
-
-.Weather__error {
+.weather__error {
   color: red;
   height: 30px;
 }

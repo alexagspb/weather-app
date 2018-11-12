@@ -1,4 +1,4 @@
-import { takeEvery, put, call } from "redux-saga/effects";
+import { takeLatest, put, call } from "redux-saga/effects";
 import {
   getCityRequest,
   getCitySuccess,
@@ -19,7 +19,7 @@ import {
 import api from "../api";
 
 export function* watchFetchCity() {
-  yield takeEvery(
+  yield takeLatest(
     [getCityRequest, removeCityRequest, selectCityRequest, updateCityRequest],
     fetchCity
   );

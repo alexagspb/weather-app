@@ -4,6 +4,7 @@ import Spinner from "react-svg-spinner";
 
 import "./Weather.css";
 
+import Input from "../Input";
 import City from "../City";
 import Day from "../Day";
 
@@ -21,32 +22,6 @@ import {
 import { getLoading } from "../../ducks/loading";
 
 class Weather extends PureComponent {
-  state = { city: "" };
-
-  handleInputChange = e => {
-    this.setState({ city: e.target.value });
-  };
-
-  handleKeyPress = e => {
-    const { city } = this.state;
-    const { getCityRequest } = this.props;
-
-    if (e.key === "Enter" && city.trim().length) {
-      getCityRequest({ location: city });
-      this.setState({ city: "" });
-    }
-  };
-
-  handleClick = e => {
-    const { city } = this.state;
-    const { getCityRequest } = this.props;
-
-    if (city.trim().length) {
-      getCityRequest({ location: city });
-      this.setState({ city: "" });
-    }
-  };
-
   async componentDidMount() {
     this.props.getCitiesRequest();
 
@@ -83,23 +58,18 @@ class Weather extends PureComponent {
   };
 
   render() {
-    const { city } = this.state;
-    const { loading, error, citiesList, activeCity } = this.props;
+    const {
+      loading,
+      error,
+      citiesList,
+      activeCity,
+      getCityRequest
+    } = this.props;
 
     return (
-      <div className="Weather">
-        <input
-          className="Weather__input"
-          placeholder="Введите город"
-          value={city}
-          onChange={this.handleInputChange}
-          onKeyPress={this.handleKeyPress}
-        />
-        <button onClick={this.handleClick} className="Weather__button">
-          Добавить город
-        </button>
-
-        <div className="Weather__error">{error}</div>
+      <div className="weather">
+        <Input getCityRequest={getCityRequest} />
+        <div className="weather__error">{error}</div>
 
         {loading ? (
           <div className="spinner row justify-content-md-center">
@@ -107,7 +77,7 @@ class Weather extends PureComponent {
           </div>
         ) : (
           <div>
-            <div className="Weather__cities">
+            <div className="weather__cities">
               {citiesList &&
                 citiesList.map(item => (
                   <City
@@ -120,7 +90,7 @@ class Weather extends PureComponent {
                   />
                 ))}
             </div>
-            <div className="Weather__days">
+            <div className="weather__days">
               {activeCity.list &&
                 activeCity.list.map(item => <Day key={item.dt} item={item} />)}
             </div>

@@ -11,27 +11,23 @@
 .City_active {
   background: aliceblue;
 }
-
 .City__update {
   width: 20px;
-  background: url(./icons/update.svg) no-repeat;
+  background: url(icons/update.svg) no-repeat;
   background-size: contain;
   cursor: pointer;
 }
-
 .City__name {
   cursor: pointer;
   width: 100%;
 }
-
 .City__remove {
   width: 20px;
-  background: url(./icons/error.svg) no-repeat;
+  background: url(icons/error.svg) no-repeat;
   background-size: contain;
   cursor: pointer;
 }
-
 .City__remove:hover {
-  background: url(./icons/error_hover.svg) no-repeat;
+  background: url(icons/error_hover.svg) no-repeat;
   background-size: contain;
 }
